@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react'
 import styled from 'styled-components'
-import { Container as NesContainer, Radios, Checkbox } from 'nes-react'
+import { Container as NesContainer, Radios } from 'nes-react'
+import FilterCheckbox from './FilterCheckbox'
 
 const Container = styled(NesContainer)`
   && {
@@ -47,21 +48,6 @@ const Filters: React.FC<FilterProps> = (props) => {
   }, [props.showWeaknessFilters]);
 
 
-  const isChecked = (pokeType: string, filtersArray: string[]) : boolean => {
-    return (filtersArray.indexOf(pokeType) !== -1)
-  }
-
-  const handleSelect = (pokeType: string, filters: string[], updateFiltersCallback: Function) : void => {
-    // if checked, remove from filters (array)
-    if (isChecked(pokeType, filters)) {
-      filters = filters.filter(type => type !== pokeType)
-      updateFiltersCallback(filters)
-    } else {
-      updateFiltersCallback(filters.concat([pokeType]))
-    }
-  }
-
-
   return (
     <Container>
       <p>Show Type Filters?</p>
@@ -80,11 +66,11 @@ const Filters: React.FC<FilterProps> = (props) => {
         <Container>
           <p>Type Filters</p>
           {PokemonTypes.map(pokeType => (
-            <Checkbox
+            <FilterCheckbox 
               key={pokeType}
-              label={pokeType}
-              checked={isChecked(pokeType, props.typeFilters)}
-              onSelect={() => handleSelect(pokeType, props.typeFilters, props.setTypeFilters)}
+              pokemonType={pokeType}
+              filters={props.typeFilters}
+              updateFilters={props.setTypeFilters}
             />
           ))}
         </Container>
@@ -106,11 +92,11 @@ const Filters: React.FC<FilterProps> = (props) => {
         <Container>
           <p>Weakness Filters</p>
           {PokemonTypes.map(pokeType => (
-            <Checkbox
+            <FilterCheckbox 
               key={pokeType}
-              label={pokeType}
-              checked={isChecked(pokeType, props.weaknessFilters)}
-              onSelect={() => handleSelect(pokeType, props.weaknessFilters, props.setWeaknessFilters)}
+              pokemonType={pokeType}
+              filters={props.weaknessFilters}
+              updateFilters={props.setWeaknessFilters}
             />
           ))}
         </Container>
