@@ -2,7 +2,6 @@ import { IResolvers } from 'apollo-server'
 import { Pokemon } from '../schema/interfaces'
 import { checkExists, isMatch, sortById } from '../lib'
 import pokemon from '../pokemon.json'
-import sortBy from 'lodash/sortBy'
 import find from 'lodash/find'
 import filter from 'lodash/filter'
 
