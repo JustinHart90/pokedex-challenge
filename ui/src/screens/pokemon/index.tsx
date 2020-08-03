@@ -1,6 +1,6 @@
 import React from 'react'
 import { Router, RouteComponentProps } from '@reach/router'
-import Pokemon from './Pokemon'
+import Pokemon from './pokemon/Pokemon'
 import ID from './id'
 
 const Screens: React.FC<RouteComponentProps & { clickLink: Function }> = ({
