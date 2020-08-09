@@ -6,6 +6,7 @@ interface SearchProps {
   searchValue: string;
   setSearchValue(searchValue: string) : void;
   setShowSearchResults(showSearchResults: boolean) : void;
+  setCanFilter(canFilter: boolean) : void;
 }
 
 const Search: React.FC<RouteComponentProps & SearchProps> = (props) => {
@@ -13,8 +14,10 @@ const Search: React.FC<RouteComponentProps & SearchProps> = (props) => {
     if (props.searchValue && props.searchValue.trim() !== '') {
       props.setSearchValue(props.searchValue)
       props.setShowSearchResults(true)
+      props.setCanFilter(false)
     } else {
       props.setShowSearchResults(false)
+      props.setCanFilter(true)
     }
   }, [props.searchValue]);
 

@@ -22,9 +22,11 @@ const Pokemon: React.FC<RouteComponentProps & { clickLink: Function }> = ({
   clickLink,
 }) => {
   // search
+  const [canSearch, setCanSearch] = React.useState(true)
   const [searchValue, setSearchValue] = React.useState('')
   const [showSearchResults, setShowSearchResults] = React.useState(false)
   // filters
+  const [canFilter, setCanFilter] = React.useState(true)
   const [typeFilters, setTypeFilters] = React.useState([])
   const [weaknessFilters, setWeaknessFilters] = React.useState([])
   const [showTypeFilters, setShowTypeFilters] = React.useState('no')
@@ -32,23 +34,28 @@ const Pokemon: React.FC<RouteComponentProps & { clickLink: Function }> = ({
 
   return (
     <Container rounded>
-      <Search
-        clickLink={clickLink}
-        searchValue={searchValue}
-        setSearchValue={setSearchValue}
-        setShowSearchResults={setShowSearchResults}
-      />
-      <Filters
-        showTypeFilters={showTypeFilters}
-        showWeaknessFilters={showWeaknessFilters}
-        typeFilters={typeFilters}
-        weaknessFilters={weaknessFilters}
-        setShowTypeFilters={setShowTypeFilters}
-        setShowWeaknessFilters={setShowWeaknessFilters}
-        setTypeFilters={setTypeFilters}
-        setWeaknessFilters={setWeaknessFilters}
-
-      />
+      {canSearch &&
+        <Search
+          clickLink={clickLink}
+          searchValue={searchValue}
+          setSearchValue={setSearchValue}
+          setShowSearchResults={setShowSearchResults}
+          setCanFilter={setCanFilter} // hide filters when searching
+        />
+      }
+      {canFilter &&
+        <Filters
+          showTypeFilters={showTypeFilters}
+          showWeaknessFilters={showWeaknessFilters}
+          typeFilters={typeFilters}
+          weaknessFilters={weaknessFilters}
+          setShowTypeFilters={setShowTypeFilters}
+          setShowWeaknessFilters={setShowWeaknessFilters}
+          setTypeFilters={setTypeFilters}
+          setWeaknessFilters={setWeaknessFilters}
+          setCanSearch={setCanSearch}
+        />
+      }
       <PokemonList
         clickLink={clickLink}
         typeFilters={typeFilters}

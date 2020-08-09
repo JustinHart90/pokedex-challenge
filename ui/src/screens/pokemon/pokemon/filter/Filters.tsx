@@ -29,23 +29,34 @@ interface FilterProps {
   setShowWeaknessFilters: Function;
   setTypeFilters: Function;
   setWeaknessFilters: Function;
+  setCanSearch: Function;
 }
 
 const Filters: React.FC<FilterProps> = (props) => {
   const [showTypeFilterBool, setShowTypeFilterBool] = React.useState(false)
   const [showWeaknessFilterBool, setShowWeaknessFilterBool] = React.useState(false)
-  
-  // show/hide type filters
+
+
+  // show/hide filters
   useEffect(() : void => {
+    // type filters
     const showTypeFilters = Boolean(props.showTypeFilters === 'yes')
     setShowTypeFilterBool(showTypeFilters)
-  }, [props.showTypeFilters]);
-  
-  // show/hide weakness filters
-  useEffect(() : void => {
+
+    // weakness filters
     const showWeaknessFilters = Boolean(props.showWeaknessFilters === 'yes')
     setShowWeaknessFilterBool(showWeaknessFilters)
-  }, [props.showWeaknessFilters]);
+  }, [props.showTypeFilters, props.showWeaknessFilters]);
+
+
+  // hide search if any filters are applied
+  useEffect(() : void => {
+    if (props.typeFilters.length > 0 || props.weaknessFilters.length > 0) {
+      props.setCanSearch(false);
+    } else {
+      props.setCanSearch(true);
+    }
+  }, [props.typeFilters, props.weaknessFilters]);
 
 
   return (
