@@ -1,10 +1,10 @@
-import React from 'react'
+import React, { useState } from 'react'
 import styled from 'styled-components'
 import { RouteComponentProps } from '@reach/router'
 import { Container as NesContainer } from 'nes-react'
-import Search from './search/Search'
-import PokemonList from './list/PokemonList'
-import Filters from './filter/Filters'
+import Search from './search'
+import PokemonList from './list'
+import Filters from './filter'
 
 const Container = styled(NesContainer)`
   && {
@@ -22,21 +22,20 @@ const Pokemon: React.FC<RouteComponentProps & { clickLink: Function }> = ({
   clickLink,
 }) => {
   // search
-  const [canSearch, setCanSearch] = React.useState(true)
-  const [searchValue, setSearchValue] = React.useState('')
-  const [showSearchResults, setShowSearchResults] = React.useState(false)
+  const [canSearch, setCanSearch] = useState(true)
+  const [searchValue, setSearchValue] = useState('')
+  const [showSearchResults, setShowSearchResults] = useState(false)
   // filters
-  const [canFilter, setCanFilter] = React.useState(true)
-  const [typeFilters, setTypeFilters] = React.useState([])
-  const [weaknessFilters, setWeaknessFilters] = React.useState([])
-  const [showTypeFilters, setShowTypeFilters] = React.useState('no')
-  const [showWeaknessFilters, setShowWeaknessFilters] = React.useState('no')
+  const [canFilter, setCanFilter] = useState(true)
+  const [typeFilters, setTypeFilters] = useState([])
+  const [weaknessFilters, setWeaknessFilters] = useState([])
+  const [showTypeFilters, setShowTypeFilters] = useState('no')
+  const [showWeaknessFilters, setShowWeaknessFilters] = useState('no')
 
   return (
     <Container rounded>
       {canSearch &&
         <Search
-          clickLink={clickLink}
           searchValue={searchValue}
           setSearchValue={setSearchValue}
           setShowSearchResults={setShowSearchResults}

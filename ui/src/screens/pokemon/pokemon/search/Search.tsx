@@ -1,28 +1,29 @@
 import React, { useEffect, ChangeEvent } from 'react'
-import { RouteComponentProps } from '@reach/router'
 
 interface SearchProps {
-  clickLink: Function;
   searchValue: string;
   setSearchValue(searchValue: string) : void;
   setShowSearchResults(showSearchResults: boolean) : void;
   setCanFilter(canFilter: boolean) : void;
 }
 
-const Search: React.FC<RouteComponentProps & SearchProps> = (props) => {
+const Search: React.FC<SearchProps> = (props) => {
+  const { searchValue, setSearchValue, setShowSearchResults, setCanFilter} = props;
+
   useEffect(() : void => {
-    if (props.searchValue && props.searchValue.trim() !== '') {
-      props.setSearchValue(props.searchValue)
-      props.setShowSearchResults(true)
-      props.setCanFilter(false)
+    if (searchValue && searchValue.trim() !== '') {
+      setSearchValue(searchValue)
+      setShowSearchResults(true)
+      setCanFilter(false)
     } else {
-      props.setShowSearchResults(false)
-      props.setCanFilter(true)
+      setShowSearchResults(false)
+      setCanFilter(true)
     }
-  }, [props.searchValue]);
+  }, [searchValue, setSearchValue, setShowSearchResults, setCanFilter]);
+
 
   const handleChange = (event: ChangeEvent<HTMLInputElement>) : void => {
-    props.setSearchValue(event.target.value)
+    setSearchValue(event.target.value)
   }
 
   return (
@@ -30,7 +31,7 @@ const Search: React.FC<RouteComponentProps & SearchProps> = (props) => {
       type='text' 
       className='nes-input'
       placeholder='🕵🏻‍♂️ search here...'
-      value={props.searchValue}
+      value={searchValue}
       onChange={handleChange}
     />
   )

@@ -1,7 +1,8 @@
-import React, { useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import styled from 'styled-components'
-import { Container as NesContainer, Radios } from 'nes-react'
-import FilterCheckbox from './FilterCheckbox'
+import { Container as NesContainer } from 'nes-react'
+import FilterRadio from './FilterRadio'
+import FilterSection from './FilterSection'
 
 const Container = styled(NesContainer)`
   && {
@@ -14,6 +15,10 @@ const Container = styled(NesContainer)`
     }
   }
 `
+
+const hasFilters = (filters: string[]) : boolean => {
+  return (filters.length > 0)
+}
 
 const PokemonTypes = [
   'Normal', 'Fire', 'Water', 'Grass', 'Flying', 'Fighting', 'Poison', 'Electric', 'Ground', 
@@ -33,84 +38,68 @@ interface FilterProps {
 }
 
 const Filters: React.FC<FilterProps> = (props) => {
-  const [showTypeFilterBool, setShowTypeFilterBool] = React.useState(false)
-  const [showWeaknessFilterBool, setShowWeaknessFilterBool] = React.useState(false)
-
+  const [showTypeSection, setShowTypeSection] = useState(false)
+  const [showWeaknessSection, setShowWeaknessSection] = useState(false)
 
   // show/hide filters
-  useEffect(() : void => {
-    // type filters
-    const showTypeFilters = Boolean(props.showTypeFilters === 'yes')
-    setShowTypeFilterBool(showTypeFilters)
+  const { showTypeFilters, showWeaknessFilters } = props;
 
-    // weakness filters
-    const showWeaknessFilters = Boolean(props.showWeaknessFilters === 'yes')
-    setShowWeaknessFilterBool(showWeaknessFilters)
-  }, [props.showTypeFilters, props.showWeaknessFilters]);
+  useEffect(() : void => {
+    setShowTypeSection(showTypeFilters === 'yes')
+    setShowWeaknessSection(showWeaknessFilters === 'yes')
+  }, [showTypeFilters, showWeaknessFilters]);
 
 
   // hide search if any filters are applied
+  const { typeFilters, weaknessFilters, setCanSearch } = props;
+
   useEffect(() : void => {
-    if (props.typeFilters.length > 0 || props.weaknessFilters.length > 0) {
-      props.setCanSearch(false);
+    if (hasFilters(typeFilters) || hasFilters(weaknessFilters)) {
+      setCanSearch(false);
     } else {
-      props.setCanSearch(true);
+      setCanSearch(true);
     }
-  }, [props.typeFilters, props.weaknessFilters]);
+  }, [typeFilters, weaknessFilters, setCanSearch]);
 
 
   return (
     <Container>
       <p>Show Type Filters?</p>
-      {props.typeFilters.length > 0 &&
-        <small>[{props.typeFilters.join(', ')}]</small>
-      }
-      <Radios
-        options={[
-          {value: 'yes', label: 'Yes'},
-          {value: 'no', label: 'No'}
-        ]}
-        selectedValue={props.showTypeFilters}
-        onValueChange={(selectedValue) => props.setShowTypeFilters(selectedValue)}
-      />
-      {showTypeFilterBool &&
-        <Container>
-          <p>Type Filters</p>
-          {PokemonTypes.map(pokeType => (
-            <FilterCheckbox 
-              key={pokeType}
-              pokemonType={pokeType}
-              filters={props.typeFilters}
-              updateFilters={props.setTypeFilters}
-            />
-          ))}
-        </Container>
+      {hasFilters(typeFilters) &&
+        <small>[{typeFilters.join(', ')}]</small>
       }
       
-      <p>Show Weakness Filters?</p>
-      {props.weaknessFilters.length > 0 &&
-        <small>[{props.weaknessFilters.join(', ')}]</small>
+      <FilterRadio
+        selectedValue={showTypeFilters}
+        onValueChange={(selectedValue) => props.setShowTypeFilters(selectedValue)}
+      />
+      
+      {showTypeSection &&
+        <FilterSection
+          label='Type Filters'
+          pokemonTypes={PokemonTypes}
+          filters={typeFilters}
+          onUpdateFilters={props.setTypeFilters}
+        />
       }
-      <Radios
-        options={[
-          {value: 'yes', label: 'Yes'},
-          {value: 'no', label: 'No'}
-        ]}
-        selectedValue={props.showWeaknessFilters}
+
+      <p>Show Weakness Filters?</p>
+      {hasFilters(weaknessFilters) &&
+        <small>[{weaknessFilters.join(', ')}]</small>
+      }
+
+      <FilterRadio
+        selectedValue={showWeaknessFilters}
         onValueChange={(selectedValue) => props.setShowWeaknessFilters(selectedValue)}
       />
-      {showWeaknessFilterBool &&
-        <Container>
-          <p>Weakness Filters</p>
-          {PokemonTypes.map(pokeType => (
-            <FilterCheckbox 
-              key={pokeType}
-              pokemonType={pokeType}
-              filters={props.weaknessFilters}
-              updateFilters={props.setWeaknessFilters}
-            />
-          ))}
-        </Container>
+
+      {showWeaknessSection &&
+        <FilterSection
+          label='Weakness Filters'
+          pokemonTypes={PokemonTypes}
+          filters={weaknessFilters}
+          onUpdateFilters={props.setWeaknessFilters}
+        />
       }
     </Container>
   )

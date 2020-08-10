@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
-import { RouteComponentProps, Link } from '@reach/router'
+import { Link } from '@reach/router'
 
 const List = styled.ul`
   display: inline-flex;
@@ -31,13 +31,16 @@ interface ListProps {
   pokemon: Pokemon[];
 }
 
-const RenderList: React.FC<RouteComponentProps & ListProps> = (props) => {
+const RenderList: React.FC<ListProps> = (props) => {
   return (
     <List>
       {props.pokemon.map(pokemon => (
         <Link key={pokemon.id} to={pokemon.id} onMouseDown={props.clickLink as any}>
           <ListItem key={pokemon.id}>
-            <img src={pokemon.img} />
+            <img 
+              src={pokemon.img} 
+              alt={`Pokemon-${pokemon.num}`}
+            />
             {pokemon.name} - {pokemon.num}
           </ListItem>
         </Link>
