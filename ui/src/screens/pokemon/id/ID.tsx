@@ -82,7 +82,7 @@ const ID: React.FC<
         <h1>
           {pokemon.name} - {pokemon.num}
         </h1>
-        <img style={{ marginBottom: '2rem' }} src={pokemon.img} />
+        <img style={{ marginBottom: '2rem' }} src={pokemon.img} alt={`Pokemon ${pokemon.id}`} />
         <Table bordered centered>
           <tr>
             <th>Types</th>
@@ -113,7 +113,7 @@ const ID: React.FC<
             }}
             to={`/pokemon/${prevEvolution.id}`}
           >
-            <img src={prevEvolution.img} />
+            <img src={prevEvolution.img} alt={`Pokemon ${pokemon.id}`} />
             <h2>{prevEvolution.name}</h2>
           </Link>
         ))}
@@ -131,7 +131,7 @@ const ID: React.FC<
             }}
             to={`/pokemon/${nextEvolution.id}`}
           >
-            <img src={nextEvolution.img} />
+            <img src={nextEvolution.img} alt={`Pokemon ${pokemon.id}`} />
             <h2>{nextEvolution.name}</h2>
           </Link>
         ))}
