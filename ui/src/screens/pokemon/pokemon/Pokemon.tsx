@@ -22,33 +22,25 @@ const Pokemon: React.FC<RouteComponentProps & { clickLink: Function }> = ({
   clickLink,
 }) => {
   // search
-  const [canSearch, setCanSearch] = useState(true)
   const [searchValue, setSearchValue] = useState('')
   const [showSearchResults, setShowSearchResults] = useState(false)
   // filters
-  const [canFilter, setCanFilter] = useState(true)
   const [typeFilters, setTypeFilters] = useState([])
   const [weaknessFilters, setWeaknessFilters] = useState([])
 
   return (
     <Container rounded>
-      {canSearch &&
-        <Search
-          searchValue={searchValue}
-          setSearchValue={setSearchValue}
-          setShowSearchResults={setShowSearchResults}
-          setCanFilter={setCanFilter} // hide filters when searching
-        />
-      }
-      {canFilter &&
-        <Filters
-          typeFilters={typeFilters}
-          weaknessFilters={weaknessFilters}
-          setTypeFilters={setTypeFilters}
-          setWeaknessFilters={setWeaknessFilters}
-          setCanSearch={setCanSearch}
-        />
-      }
+      <Search
+        searchValue={searchValue}
+        setSearchValue={setSearchValue}
+        setShowSearchResults={setShowSearchResults}
+      />
+      <Filters
+        typeFilters={typeFilters}
+        weaknessFilters={weaknessFilters}
+        setTypeFilters={setTypeFilters}
+        setWeaknessFilters={setWeaknessFilters}
+      />
       <PokemonList
         clickLink={clickLink}
         typeFilters={typeFilters}

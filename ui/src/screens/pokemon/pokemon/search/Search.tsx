@@ -4,22 +4,19 @@ interface SearchProps {
   searchValue: string;
   setSearchValue(searchValue: string) : void;
   setShowSearchResults(showSearchResults: boolean) : void;
-  setCanFilter(canFilter: boolean) : void;
 }
 
 const Search: React.FC<SearchProps> = (props) => {
-  const { searchValue, setSearchValue, setShowSearchResults, setCanFilter} = props;
+  const { searchValue, setSearchValue, setShowSearchResults } = props;
 
   useEffect(() : void => {
     if (searchValue && searchValue.trim() !== '') {
       setSearchValue(searchValue)
       setShowSearchResults(true)
-      setCanFilter(false)
     } else {
       setShowSearchResults(false)
-      setCanFilter(true)
     }
-  }, [searchValue, setSearchValue, setShowSearchResults, setCanFilter]);
+  }, [searchValue, setSearchValue, setShowSearchResults]);
 
 
   const handleChange = (event: ChangeEvent<HTMLInputElement>) : void => {

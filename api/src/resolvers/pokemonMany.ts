@@ -1,8 +1,33 @@
 import { IResolvers } from 'apollo-server'
 import { Pokemon } from '../schema/interfaces'
 import pokemon from '../pokemon.json'
+import Fuse from 'fuse.js'
 import filter from 'lodash/filter'
 import sortBy from 'lodash/sortBy'
+
+const pokemonArray: Pokemon[] = Object.values(pokemon)
+const options = {
+  isCaseSensitive: false,
+  threshold: 0.7,
+  keys: [
+    {
+      name: 'num',
+      weight: 1
+    },
+    {
+      name: 'name',
+      weight: 0.8
+    },
+    {
+      name: 'nextEvolutions.name',
+      weight: 0.15
+    },
+    {
+      name: 'prevEvolutions.name',
+      weight: 0.05
+    }
+  ]
+}
 
 const checkExists = (filters: string[]) : boolean => {
   return Boolean(filters.length > 0);
@@ -16,8 +41,8 @@ const pokemonMany: IResolvers<any, any> = {
   Query: {
     pokemonMany(
       _,
-      { typeFilters = [], weaknessFilters = [], skip = 0, limit = 999 } : 
-      { typeFilters?: string[], weaknessFilters?: string[], skip?: number; limit?: number }
+      { searchValue = '', typeFilters = [], weaknessFilters = [], skip = 0, limit = 999 } : 
+      { searchValue?: string, typeFilters?: string[], weaknessFilters?: string[], skip?: number; limit?: number }
     ): Pokemon[] {
 
       // hold state of which filters are provided
@@ -31,8 +56,8 @@ const pokemonMany: IResolvers<any, any> = {
 
       // callback function to apply filters
       const applyFilters = (poke: Pokemon) : boolean => {
-        let typesMatch: boolean = isMatch(poke.types, typeFilters)
-        let weaknessesMatch: boolean = isMatch(poke.weaknesses, weaknessFilters)
+        const typesMatch: boolean = isMatch(poke.types, typeFilters)
+        const weaknessesMatch: boolean = isMatch(poke.weaknesses, weaknessFilters)
 
         if (areProvided.typeFilters && areProvided.weaknessFilters) {
           return (typesMatch && weaknessesMatch)
@@ -40,19 +65,27 @@ const pokemonMany: IResolvers<any, any> = {
 
         if (areProvided.typeFilters) {
           return typesMatch
-        } else {
-          return weaknessesMatch
         }
+
+        return weaknessesMatch
       }
 
       // apply any filters that are provided
       const filteredPokemon = (
         shouldFilter
-        ? filter(pokemon, applyFilters)
-        : pokemon
+        ? filter(pokemonArray, applyFilters)
+        : pokemonArray
       )
 
-      return sortBy(filteredPokemon, (poke: Pokemon) => parseInt(poke.id, 10))
+      const fuse = new Fuse(filteredPokemon, options)
+      // apply fuzzy search
+      const unSortedPokemon = (
+        searchValue && searchValue.trim() !== ''
+        ? fuse.search(searchValue).map(result => result.item)
+        : filteredPokemon
+      )
+
+      return sortBy(unSortedPokemon, (poke: Pokemon) => parseInt(poke.id, 10))
       .slice(
         skip,
         limit + skip

@@ -19,11 +19,9 @@ export default gql`
 
   type Query {
     pokemonMany(
-      typeFilters: [String], weaknessFilters: [String], skip: Int, limit: Int
+      searchValue: String, typeFilters: [String], weaknessFilters: [String], skip: Int, limit: Int
     ): [Pokemon!]!
     
     pokemonOne(id: ID!): Pokemon
-    
-    fuzzySearch(searchValue: String!) : [Pokemon]
-  }
+}
 `

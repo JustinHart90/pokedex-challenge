@@ -1,15 +1,14 @@
 import React from 'react'
 import { RouteComponentProps } from '@reach/router'
 import { useQuery, gql } from '@apollo/client'
-import SearchResults from '../search/SearchResults'
 import RenderList from './List'
 
 const POKEMON_MANY = gql`
   query(
-    $typeFilters: [String], $weaknessFilters: [String], $skip: Int, $limit: Int
+     $searchValue: String, $typeFilters: [String], $weaknessFilters: [String], $skip: Int, $limit: Int
   ) {
     pokemonMany(
-      typeFilters: $typeFilters, weaknessFilters: $weaknessFilters, skip: $skip, limit: $limit
+      searchValue: $searchValue, typeFilters: $typeFilters, weaknessFilters: $weaknessFilters, skip: $skip, limit: $limit
     ) {
       id
       name
@@ -31,6 +30,7 @@ interface PokemonListProps {
 const PokemonList: React.FC<RouteComponentProps & PokemonListProps> = (props) => {
   const { loading, error, data } = useQuery(POKEMON_MANY, {
     variables: {
+      searchValue: props.searchValue,
       typeFilters: props.typeFilters,
       weaknessFilters: props.weaknessFilters
     }
@@ -45,26 +45,13 @@ const PokemonList: React.FC<RouteComponentProps & PokemonListProps> = (props) =>
   if (error || !pokemonList) {
     return <p>Error!</p>
   }
-
-  const renderList = () => {
-    if (props.showSearchResults) {
-      return (
-        <SearchResults
-          clickLink={props.clickLink}
-          searchValue={props.searchValue}
-        />
-      );
-    } else {
-      return (
-        <RenderList 
-          clickLink={props.clickLink}
-          pokemon={pokemonList}
-        />
-      )
-    }
-  }
-
-  return renderList();
+  
+  return (
+    <RenderList 
+      clickLink={props.clickLink}
+      pokemon={pokemonList}
+    />
+  )
 }
 
 export default PokemonList

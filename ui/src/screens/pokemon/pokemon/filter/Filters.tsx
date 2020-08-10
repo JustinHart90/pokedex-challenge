@@ -30,7 +30,6 @@ interface FilterProps {
   weaknessFilters: string[];
   setTypeFilters: Function;
   setWeaknessFilters: Function;
-  setCanSearch: Function;
 }
 
 const Filters: React.FC<FilterProps> = (props) => {
@@ -49,23 +48,11 @@ const Filters: React.FC<FilterProps> = (props) => {
   }, [showTypeFilters, showWeaknessFilters]);
 
 
-  // hide search if any filters are applied
-  const { typeFilters, weaknessFilters, setCanSearch } = props;
-
-  useEffect(() : void => {
-    if (hasFilters(typeFilters) || hasFilters(weaknessFilters)) {
-      setCanSearch(false);
-    } else {
-      setCanSearch(true);
-    }
-  }, [typeFilters, weaknessFilters, setCanSearch]);
-
-
   return (
     <Container>
       <p>Show Type Filters?</p>
-      {hasFilters(typeFilters) &&
-        <small>[{typeFilters.join(', ')}]</small>
+      {hasFilters(props.typeFilters) &&
+        <small>[{props.typeFilters.join(', ')}]</small>
       }
       
       <FilterRadio
@@ -77,14 +64,14 @@ const Filters: React.FC<FilterProps> = (props) => {
         <FilterSection
           label='Type Filters'
           pokemonTypes={PokemonTypes}
-          filters={typeFilters}
+          filters={props.typeFilters}
           onUpdateFilters={props.setTypeFilters}
         />
       }
 
       <p>Show Weakness Filters?</p>
-      {hasFilters(weaknessFilters) &&
-        <small>[{weaknessFilters.join(', ')}]</small>
+      {hasFilters(props.weaknessFilters) &&
+        <small>[{props.weaknessFilters.join(', ')}]</small>
       }
 
       <FilterRadio
@@ -96,7 +83,7 @@ const Filters: React.FC<FilterProps> = (props) => {
         <FilterSection
           label='Weakness Filters'
           pokemonTypes={PokemonTypes}
-          filters={weaknessFilters}
+          filters={props.weaknessFilters}
           onUpdateFilters={props.setWeaknessFilters}
         />
       }
