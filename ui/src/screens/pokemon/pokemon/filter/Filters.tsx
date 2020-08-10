@@ -26,24 +26,23 @@ const PokemonTypes = [
 ]
 
 interface FilterProps {
-  showTypeFilters: string;
-  showWeaknessFilters: string;
   typeFilters: string[];
   weaknessFilters: string[];
-  setShowTypeFilters: Function;
-  setShowWeaknessFilters: Function;
   setTypeFilters: Function;
   setWeaknessFilters: Function;
   setCanSearch: Function;
 }
 
 const Filters: React.FC<FilterProps> = (props) => {
+  // type filters
   const [showTypeSection, setShowTypeSection] = useState(false)
+  const [showTypeFilters, setShowTypeFilters] = useState('no')
+  
+  // weakness filters
   const [showWeaknessSection, setShowWeaknessSection] = useState(false)
+  const [showWeaknessFilters, setShowWeaknessFilters] = useState('no')
 
-  // show/hide filters
-  const { showTypeFilters, showWeaknessFilters } = props;
-
+  // show/hide sections
   useEffect(() : void => {
     setShowTypeSection(showTypeFilters === 'yes')
     setShowWeaknessSection(showWeaknessFilters === 'yes')
@@ -71,7 +70,7 @@ const Filters: React.FC<FilterProps> = (props) => {
       
       <FilterRadio
         selectedValue={showTypeFilters}
-        onValueChange={(selectedValue) => props.setShowTypeFilters(selectedValue)}
+        onValueChange={(selectedValue) => setShowTypeFilters(selectedValue)}
       />
       
       {showTypeSection &&
@@ -90,7 +89,7 @@ const Filters: React.FC<FilterProps> = (props) => {
 
       <FilterRadio
         selectedValue={showWeaknessFilters}
-        onValueChange={(selectedValue) => props.setShowWeaknessFilters(selectedValue)}
+        onValueChange={(selectedValue) => setShowWeaknessFilters(selectedValue)}
       />
 
       {showWeaknessSection &&

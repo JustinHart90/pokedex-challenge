@@ -3,7 +3,7 @@ import { Radios } from 'nes-react'
 
 interface FilterRadioProps {
   selectedValue: string;
-  onValueChange(selectedValue: string) : Function;
+  onValueChange(selectedValue: string) : void;
 }
 
 const FilterRadio: React.FC<FilterRadioProps> = (props) => {

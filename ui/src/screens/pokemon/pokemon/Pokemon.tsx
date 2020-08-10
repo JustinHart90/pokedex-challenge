@@ -29,8 +29,6 @@ const Pokemon: React.FC<RouteComponentProps & { clickLink: Function }> = ({
   const [canFilter, setCanFilter] = useState(true)
   const [typeFilters, setTypeFilters] = useState([])
   const [weaknessFilters, setWeaknessFilters] = useState([])
-  const [showTypeFilters, setShowTypeFilters] = useState('no')
-  const [showWeaknessFilters, setShowWeaknessFilters] = useState('no')
 
   return (
     <Container rounded>
@@ -44,12 +42,8 @@ const Pokemon: React.FC<RouteComponentProps & { clickLink: Function }> = ({
       }
       {canFilter &&
         <Filters
-          showTypeFilters={showTypeFilters}
-          showWeaknessFilters={showWeaknessFilters}
           typeFilters={typeFilters}
           weaknessFilters={weaknessFilters}
-          setShowTypeFilters={setShowTypeFilters}
-          setShowWeaknessFilters={setShowWeaknessFilters}
           setTypeFilters={setTypeFilters}
           setWeaknessFilters={setWeaknessFilters}
           setCanSearch={setCanSearch}
